@@ -6,6 +6,7 @@ sourcedir=<>
 destdir=<>
 
 # change extension of your fastq accordingly
+# for fastq.gz files
 for f in $sourcedir/*.fastq.gz
 do      
 	fbase=$(basename "$f")

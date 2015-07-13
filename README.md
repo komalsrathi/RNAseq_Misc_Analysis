@@ -1,2 +1,2 @@
 # RNASeq_Analysis
-Scripts for miscellaneous RNASeq Analysis in R, Perl and Bash
+Miscellaneous scripts for RNASeq Analysis in R, Perl and Bash

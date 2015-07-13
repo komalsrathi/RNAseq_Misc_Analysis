@@ -5,7 +5,7 @@ sourcedir=<>
 # set destdir to directory - trimmed fastq files
 destdir=<>
 
-# change extension of your fastq accordingly
+# change extension of your fastq accordingly (fastq.gz or txt.bz2)
 # for fastq.gz files
 for f in $sourcedir/*.fastq.gz
 do      

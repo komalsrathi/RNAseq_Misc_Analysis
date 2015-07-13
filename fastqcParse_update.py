@@ -4,6 +4,8 @@ import sys
 rootdir = sys.argv[1]
 
 # this works with all files just need to change line 19 depending on the extension of the fastq files
+# given a fastqc output directory as input, this script goes through each fastqc output within that directory
+# and retreives information like total number of reads, sequence duplication levels, sequence quality etc
 with open('out_fastqc_new.csv','w') as fout:
 	a = (','.join(('Filename','Encoding','Total Sequences','Sequence length','Per base sequence quality','Per sequence quality','Per base sequence content','Per base GC content','Per sequence GC content','Per base N content','Sequence Duplication levels','Total Duplicate Percentage','Overrepresented','Kmer content')))
 	fout.write(''.join((a,'\n')))

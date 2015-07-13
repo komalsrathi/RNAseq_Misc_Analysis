@@ -3,6 +3,7 @@ import os
 import sys
 rootdir = sys.argv[1]
 
+# usage python fastqcParse.py <directory with fastqc output files/directories>
 # this works with all files just need to change line 19 depending on the extension of the fastq files
 # given a fastqc output directory as input, this script goes through each fastqc output within that directory
 # and retreives information like total number of reads, sequence duplication levels, sequence quality etc

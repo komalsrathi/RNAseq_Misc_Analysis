@@ -1,0 +1,3 @@
+#Ensembl uses 1 instead of chr1 for each chromsome. Filter out other contigs and then add the chr
+zcat Homo_sapiens.GRCh37.72.gtf.gz | awk '/^MT|^X|^Y|^[1-9]/ { print "chr"$0}' | sed 's/chrMT/chrM/' > Homo_sapiens.GRCh37.72.gtf
+

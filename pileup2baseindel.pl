@@ -48,13 +48,13 @@ if($help){
 
 unless ($input){
 	print "Input file does not provide yet\n";
-    print "\n$usage\n";
-    exit(1);
+    	print "\n$usage\n";
+    	exit(1);
 }
 if(! -e $input){
-    print "Input file '$input' does not exists\n";
-    print "\n$usage\n";
-    exit(1);
+	print "Input file '$input' does not exists\n";
+    	print "\n$usage\n";
+    	exit(1);
 }
 
 #Do the parsing
@@ -63,54 +63,33 @@ print "[",scalar(localtime),"] Begin parsing...\n";
 
 while(my $line = <FILE>)
 {
-$line=~s/\r|\n//g;
-my ($chr,$loc,$ref,@dp_bases_bq) = split /\s+/, $line;
-my $n = int (scalar(@dp_bases_bq)/3); #determine how many samples, use int just in safe
-my %files;
-foreach my $i (1..$n){
-	my $fh = new IO::File;
-	$fh->open(">> ${prefix}${i}.txt");
-	 if ($. == 1) {
-         print $fh "chr\t"."loc\t"."ref\t"."A\t"."T\t"."C\t"."G\t"."a\t"."t\t"."c\t"."g\t"."Insertion\t"."Deletion\n";
-      }
-	my @region=(3*($i-1),3*($i-1)+1,3*($i-1)+2);
-	my ($dp,$bases,$bq) = @dp_bases_bq[@region];
-	my $str = parsePileup($bases,$bq,$BQcut,$offset,$ref);
-        #print "String:",$str,"\n";
-	if($str){
-		print $fh join "\t",($chr,$loc,$ref,$str);
+	$line=~s/\r|\n//g;
+	my ($chr,$loc,$ref,@dp_bases_bq) = split /\s+/, $line;
+	my $n = int (scalar(@dp_bases_bq)/3); #determine how many samples, use int just in safe
+	my %files;
+	foreach my $i (1..$n){
+		my $fh = new IO::File;
+		$fh->open(">> ${prefix}${i}.txt");
+	 	if ($. == 1) {
+         	print $fh "chr\t"."loc\t"."ref\t"."A\t"."T\t"."C\t"."G\t"."a\t"."t\t"."c\t"."g\t"."Insertion\t"."Deletion\n";
+      		}		
+		my @region=(3*($i-1),3*($i-1)+1,3*($i-1)+2);
+		my ($dp,$bases,$bq) = @dp_bases_bq[@region];
+		my $str = parsePileup($bases,$bq,$BQcut,$offset,$ref);
+        	print "String:",$str,"\n";
+		if($str){
+			print $fh join "\t",($chr,$loc,$ref,$str);
+		}
+		$files{$i}=$fh;
+		foreach my $k (keys %files){
+			$files{$k}->close;
+		}
 	}
-	
-     
-	
-	
-	$files{$i}=$fh;
-foreach my $k (keys %files){
-	$files{$k}->close;
 }
-}
-
-}
-#
-#while(<FILE>){
-#	s/\r|\n//g;
-#	my ($chr,$loc,$ref,@dp_bases_bq) = split /\s+/;
-#	my $n = int (scalar(@dp_bases_bq)/3); #determine how many samples, use int just in safe
-#	foreach my $i (1..$n){
-#		my $fh = $files{$i};
-#		my @region=(3*($i-1),3*($i-1)+1,3*($i-1)+2);
-#		my ($dp,$bases,$bq) = @dp_bases_bq[@region];
-#		my $str = parsePileup($bases,$bq,$BQcut,$offset);
-#		if($str ne "*"){
-#			print $fh join "\t",($chr,$loc,$ref,$str);
-#		}
-#	}
-#}
 
 close FILE;
 
 print "[",scalar(localtime),"] Finished\n";
-
 
 sub parsePileup{
 	my ($bases,$bq,$BQcut,$offset,$ref) = @_;
@@ -152,18 +131,11 @@ sub parsePileup{
 
 	#Now @base and @bq have the same length
 	my @base=split (//,$bases);
-	print "BASE: ",@base,"\n";
 	my @bq=split(//,$bq);
-	#print "BASE:",@base,"\t";
-	#print "BAQ:",@bq,"\t";
-	#print "REF:",$ref,"\n";
-	#I have check it
-	#if(scalar(@base) ne scalar(@bq)){
-	#	print $_,"\n";
-	#}
-	#foreach my $c (@base){
-	#	$check{$c}++;
-	#}
+	print "BASE:",@base,"\t";
+	print "BAQ:",@bq,"\t";
+	print "REF:",$ref,"\n";
+	
 	my $forward_A=0;
 	my $forward_T=0;
 	my $forward_C=0;
@@ -177,7 +149,7 @@ sub parsePileup{
 	for(my $i=0;$i<@base;$i++){
 		my $ch=$base[$i];
 		my $score=ord($bq[$i])-$offset;
-		#print $score,"\t",$BQcut,"\n";
+		print $score,"\t",$BQcut,"\n";
 		if($score>=$BQcut){
 		    if($ch eq "A"){
 		        $forward_A++;
@@ -235,8 +207,7 @@ sub parsePileup{
 		}#end the condition  $score>=$BQcut
 	}#end the loop
 
-    #my $str="$chr\t$loc"."\t".$ref."\t".$forward_A."\t".$forward_T."\t".$forward_C."\t".$forward_G."\t".$reverse_A."\t".$reverse_T."\t".$reverse_C."\t".$reverse_G."\t";
-	my $str=$forward_A."\t".$forward_T."\t".$forward_C."\t".$forward_G."\t".$reverse_A."\t".$reverse_T."\t".$reverse_C."\t".$reverse_G."\t";
+    	my $str=$forward_A."\t".$forward_T."\t".$forward_C."\t".$forward_G."\t".$reverse_A."\t".$reverse_T."\t".$reverse_C."\t".$reverse_G."\t";
 	
 	my $insertion="NA";
 	my $deletion="NA";

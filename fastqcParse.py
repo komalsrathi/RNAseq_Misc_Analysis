@@ -17,6 +17,7 @@ with open('out_fastqc.csv','w') as fout:
 						if (line.startswith('Filename')):
 							aa,aavalue = line.split('\t',1)
 							avalue,blah,blaaaa = aavalue.split('.',3)
+							# avalue = re.sub(".txt.bz2","",aavalue) for txt.bz2 files
 						elif (line.startswith('Encoding')):
 							bb,bvalue = line.split('\t',1)
 						elif (line.startswith('Total Sequences')):
